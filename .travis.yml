@@ -7,16 +7,68 @@ env:
 
 matrix:
   include:
+    ##
+    # Test basic installation with different Travis environments
+    ##
+    # Ubuntu 12.04 container build
+    - os: linux
+      sudo: false
+      env: COMPONENTS=icc
+    # Ubuntu 12.04 VM
+    - os: linux
+      sudo: required
+      env: COMPONENTS=icc
+    # Ubuntu 14.04 VM
+    - os: linux
+      sudo: required
+      dist: trusty
+      env: COMPONENTS=icc
+
+    ##
+    # Test individual components
+    ##
+    # IPP
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,ipp"
+    # TBB
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,tbb"
+    # DAAL
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,daal"
+    # MPI
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,mpi"
+    # Fortran
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,ifort"
+    # Fortran + MKL
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,ifort,mkl"
+    # Fortran + MPI
+    - os: linux
+      sudo: false
+      env: COMPONENTS="icc,ifort,mpi"
 
     # Everything (for debugging without taxing Travis too heavily)
     - os: linux
       sudo: false
       env: COMPONENTS="icc,ifort,mpi,daal,ipp,tbb,mkl"
-
 before_install:
   - ./install-icc.sh --components "${COMPONENTS}"
   - source ~/.bashrc
 script:
+  - icc_path=$(which icc)
+  - echo $icc_path
+  - intel_path=${icc_path%/*/*}
+  - echo $intel_path
+  - ls $intel_path/lib/intel64
   # C compiler
   - '[[ "${COMPONENTS}" != *"icc"* ]] || (icc -std=c99 test/test.c -o test/test-c99 && ./test/test-c99)'
   # C++ compiler
