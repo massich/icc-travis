@@ -61,6 +61,7 @@ matrix:
     #   sudo: false
     #   env: COMPONENTS="icc,ifort,mpi,daal,ipp,tbb,mkl"
 before_install:
+  - env
   - ./install-icc.sh --components "${COMPONENTS}"
   - source ~/.bashrc
 script:
