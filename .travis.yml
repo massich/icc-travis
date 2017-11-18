@@ -56,10 +56,10 @@ matrix:
       sudo: false
       env: COMPONENTS="icc,ifort,mpi"
 
-    # Everything (for debugging without taxing Travis too heavily)
-    - os: linux
-      sudo: false
-      env: COMPONENTS="icc,ifort,mpi,daal,ipp,tbb,mkl"
+    # # Everything (for debugging without taxing Travis too heavily)
+    # - os: linux
+    #   sudo: false
+    #   env: COMPONENTS="icc,ifort,mpi,daal,ipp,tbb,mkl"
 before_install:
   - ./install-icc.sh --components "${COMPONENTS}"
   - source ~/.bashrc
